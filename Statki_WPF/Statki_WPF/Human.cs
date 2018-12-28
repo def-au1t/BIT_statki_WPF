@@ -42,47 +42,28 @@ namespace Statki_WPF
 
         public override void SetShips()
         {
-            int k = 0;
-
-            int position_x = -1;
-            int position_y = -1;
-            int dir = -1;
-            Random rnd = new Random(Guid.NewGuid().GetHashCode());
-            for (int j = 4; j >= 1; j--)
-            {
-                for (int i = 0; i < 5 - j; i++)
-                {
-                    do
-                    {
-                        position_x = rnd.Next(0, board.size);
-                        position_y = rnd.Next(0, board.size);
-                        dir = rnd.Next(0, 2);
-                    } while (board.CanPutShip(position_x, position_y, j, (eDirection)dir) != true);
-
-                    ship[k] = new Ship(j, position_x, position_y, (eDirection)dir, this.board);
-                    board.PutShip(position_x, position_y, j, (eDirection)dir);
-
-                    k++;
-                }
-            }
+            SetShipsRandom();
         }
         public override void MakeMove(int x, int y)
         {
             int result = game.MakeAttack(this, x, y);
             if (result == 0)
             {
-                game.window.DrawHiddenBoard(game.player2.board, 2);
-                game.window.Start_button.Content = "Komputer na ruchu";
+                if (Game.DEBUG == true) game.window.DrawBoard(game.player2.board, 2);
+                else game.window.DrawHiddenBoard(game.player2.board, 2);
+                game.window.UpdateShipNumber();
+                game.window.Start_button.Content = game.player2.name+" na ruchu";
                 game.GameStatus = eState.ComputerMove;
                 game.player2.MakeMove(-1,-1);
             }
 
             if (result == 1)
             {
-                game.window.DrawHiddenBoard(game.player2.board, 2);
+                if (Game.DEBUG == true) game.window.DrawBoard(game.player2.board, 2);
+                else game.window.DrawHiddenBoard(game.player2.board, 2);
+                game.window.UpdateShipNumber();
                 if (game.CheckIfFinished())
                 {
-                    game.finished = true;
                     game.GameStatus = eState.Finished;
                     game.GameOver(this);
                     return;
@@ -90,6 +71,11 @@ namespace Statki_WPF
                 return;
             }
             return;
+
+        }
+
+        public void setShipsManually()
+        {
 
         }
     /*    public int ReadNumber()

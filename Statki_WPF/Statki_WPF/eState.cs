@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Statki_WPF
 {
-    public enum eState { Init, Started, PlayerMove, ComputerMove, Finished };
+    public enum eState { Init, Started, PlayerMove, ComputerMove, Finished, ShipSetup, HoldingShip};
 }

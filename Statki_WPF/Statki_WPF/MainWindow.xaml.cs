@@ -100,6 +100,43 @@ namespace Statki_WPF
             }
         }
 
+        public void UpdateShipNumber()
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                SolidColorBrush brush = new SolidColorBrush();
+                SolidColorBrush brush2 = new SolidColorBrush();
+                TextBlock textbox = this.player1_ship_grid.Children.Cast<TextBlock>()
+                    .First(i => Grid.GetRow(i) == j && Grid.GetColumn(i) == 1);
+                TextBlock textbox2 = this.player2_ship_grid.Children.Cast<TextBlock>()
+                    .First(i => Grid.GetRow(i) == j && Grid.GetColumn(i) == 1);
+                if (game.player1.ShipNumber[j] == 0)
+                {
+                    brush.Color = Color.FromRgb(198, 0, 0);
+                    textbox.Foreground = brush;
+                    textbox.Text = "brak";
+                }
+                else
+                {
+                    brush.Color = Color.FromRgb(0, 198, 0);
+                    textbox.Foreground = brush;
+                    textbox.Text = game.player1.ShipNumber[j].ToString();
+                }
+                if (game.player2.ShipNumber[j] == 0)
+                {
+                    brush2.Color = Color.FromRgb(198, 0, 0);
+                    textbox2.Foreground = brush2;
+                    textbox2.Text = "brak";
+                }
+                else
+                {
+                    brush2.Color = Color.FromRgb(0, 198, 0);
+                    textbox2.Foreground = brush2;
+                    textbox2.Text = game.player2.ShipNumber[j].ToString();
+                }
+            }
+        }
+
         public void DrawBoard(Board board, int boardNumber)
         {
             for (int i = 0; i < Game.BOARD_SIZE; i++)
@@ -132,9 +169,20 @@ namespace Statki_WPF
                 game.player1.SetShips();
                 game.player2.SetShips();
                 DrawBoard(game.player1.board, 1);
-                DrawHiddenBoard(game.player2.board, 2);
+                if(Game.DEBUG==true)DrawBoard(game.player2.board, 2);
+                else DrawHiddenBoard(game.player2.board, 2);
+                UpdateShipNumber();
                 game.GameStatus = eState.PlayerMove;
+                this.Start_button.Content = game.player1.name + " na ruchu";
             }
         }
+        public void ChangeStartButtonBackgroundToGrey() {
+            this.Start_button.Background = new SolidColorBrush(Color.FromRgb(220,220,220));
+        }
+        public void ChangeStartButtonBackgroundToGreen()
+        {
+            this.Start_button.Background = new SolidColorBrush(Color.FromRgb(120, 255, 86));
+        }
+
     }
 }

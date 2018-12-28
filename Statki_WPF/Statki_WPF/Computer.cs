@@ -8,70 +8,117 @@ namespace Statki_WPF
 {
     public class Computer : Player
     {
-        public Computer(Game g, String n) : base(g, n) { }
+        public Stack<Field> ListOfAttackedAndEmptyNear;
+        public Computer(Game g, String n) : base(g, n) {
+            ListOfAttackedAndEmptyNear = new Stack<Field>();
+        }
         public override void SetShips()
         {
-            int k = 0;
-
-            int position_x = -1;
-            int position_y = -1;
-            int dir = -1;
-            Random rnd = new Random(Guid.NewGuid().GetHashCode());
-            for (int j = 4; j >= 1; j--)
-            {
-                for (int i = 0; i < 5 - j; i++)
-                {
-                    do
-                    {
-                        position_x = rnd.Next(0, board.size);
-                        position_y = rnd.Next(0, board.size);
-                        dir = rnd.Next(0, 2);
-                    } while (board.CanPutShip(position_x, position_y, j, (eDirection)dir) != true);
-
-                    ship[k] = new Ship(j, position_x, position_y, (eDirection)dir, this.board);
-                    board.PutShip(position_x, position_y, j, (eDirection)dir);
-
-                    k++;
-                }
-            }
+            SetShipsRandom();
         }
 
-
-        public async override void MakeMove(int x=-1, int y=-1)
+        private void MakeMoveRandom()
         {
-
-            //  game.board1.DrawBoard();
-            //  game.board2.DrawBoard();
-
-            //     Game.DrawTitle();
-            int result = -1;
-            await Task.Delay(400);
-            while (result == -1)
+            int x, y;
+            do
             {
                 Random rnd = new Random(Guid.NewGuid().GetHashCode());
                 x = rnd.Next(0, board.size);
                 y = rnd.Next(0, board.size);
-                result = game.MakeAttack(this, x, y);
-            }
-            if (result == 0) //trafiono puste pole
+
+            } while (MakeMoveOnField(x, y) == false);
+
+        }
+
+        public void MakeMoveBetter()
+        {
+            Field f;
+            if(ListOfAttackedAndEmptyNear.Count == 0)
             {
-                game.window.DrawBoard(game.player1.board, 1);
-                game.window.Start_button.Content = "Jacek na ruchu";
-                game.GameStatus = eState.PlayerMove;
+                MakeMoveRandom();
                 return;
             }
-            if (result == 1) //trafiono okręt
+            else
+            {
+                bool flag = false;
+                do                                  //ściąganie ze stosu elementów obok których jest już zajęte
+                {
+                    flag = false;
+                    f = ListOfAttackedAndEmptyNear.Peek();
+                    if (game.player1.board.CanAttackNear(f.Position_x, f.Position_y) == false)
+                    {
+                        ListOfAttackedAndEmptyNear.Pop();
+                        flag = true;
+                        if (ListOfAttackedAndEmptyNear.Count == 0) flag = false;
+                    }
+                } while (flag);
+                if (ListOfAttackedAndEmptyNear.Count == 0)
+                {
+                    MakeMoveRandom();
+                    return;
+                }
+            }
+            bool flag2;
+            do
+            {
+                Random rnd = new Random(Guid.NewGuid().GetHashCode());
+                int rand = rnd.Next(0, 4);
+                flag2 = false;
+                switch (rand)
+                {
+                    case 0:
+                        if (MakeMoveOnField(f.Position_x + 1, f.Position_y) == false) flag2 = true;
+                        break;
+                    case 1:
+                        if (MakeMoveOnField(f.Position_x - 1, f.Position_y) == false) flag2 = true;
+                        break;
+                    case 2:
+                        if (MakeMoveOnField(f.Position_x, f.Position_y + 1) == false) flag2 = true;
+                        break;
+                    case 3:
+                        if (MakeMoveOnField(f.Position_x, f.Position_y - 1) == false) flag2 = true;
+                        break;
+                }
+            } while (flag2 == true);
+            return;
+        }
+
+        public bool MakeMoveOnField(int x, int y)
+        {
+
+            int result = game.MakeAttack(this, x, y);
+            if (result != 0 && result != 1) return false;
+            if (result == 0)
             {
                 game.window.DrawBoard(game.player1.board, 1);
+                game.window.UpdateShipNumber();
+                game.window.Start_button.Content = game.player1.name+" na ruchu";
+                game.GameStatus = eState.PlayerMove;
+                return true;
+            }
+
+            if (result == 1)
+            {
+                game.window.DrawBoard(game.player1.board, 1);
+                game.window.UpdateShipNumber();
+                this.ListOfAttackedAndEmptyNear.Push(game.player1.board.field[x, y]); 
                 if (game.CheckIfFinished())
                 {
                     game.GameStatus = eState.Finished;
                     game.GameOver(this);
-                    return;
+                    return true;
                 };
                 this.MakeMove();
+                return true;
             }
+            return true;
 
+        }
+
+        public async override void MakeMove(int x=-1, int y=-1)
+        {
+            await Task.Delay(Game.COMPUTER_DELAY);
+            MakeMoveBetter();
         }
     }
 }

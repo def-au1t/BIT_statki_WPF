@@ -48,6 +48,7 @@ namespace Statki_WPF
         }
         public void Sink()
         {
+            this.board.owner.ShipNumber[this.length - 1]--;
             this.isSinked = true;
             return;
         }

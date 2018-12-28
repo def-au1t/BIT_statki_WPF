@@ -14,10 +14,10 @@ namespace Statki_WPF
         }
         public int size { get; set; }
         public Field[,] field;
-        public Player player;
+        public Player owner;
         public void Init(Player p)
         {
-            this.player = p;
+            this.owner = p;
             field = new Field[size, size];
             for (int i = 0; i < size; i++)
             {
@@ -30,53 +30,7 @@ namespace Statki_WPF
                 }
             }
         }
-
-        public void DrawBoard()
-        {
-            System.Console.Write("\t");
-            for (int i = 0; i < size; i++)
-            {
-                System.Console.Write(i + "\t");
-            }
-            System.Console.WriteLine();
-            for (int i = 0; i < size; i++)
-            {
-                System.Console.Write(i + "\t");
-                for (int j = 0; j < size; j++)
-                {
-                    if (field[i, j].Status == eFieldStatus.Empty) System.Console.Write("[ ]" + "\t");
-                    if (field[i, j].Status == eFieldStatus.Empty_Missed) System.Console.Write("[*]" + "\t");
-                    if (field[i, j].Status == eFieldStatus.Ship_Destoyed) System.Console.Write("[X]" + "\t");
-                    if (field[i, j].Status == eFieldStatus.Ship) System.Console.Write("[#]" + "\t");
-                }
-                System.Console.WriteLine();
-            }
-            System.Console.WriteLine();
-            System.Console.WriteLine();
-        }
-        public void DrawBoardHidden()
-        {
-
-            System.Console.Write("\t");
-            for (int i = 0; i < size; i++)
-            {
-                System.Console.Write(i + "\t");
-            }
-            System.Console.WriteLine();
-            for (int i = 0; i < size; i++)
-            {
-                System.Console.Write(i + "\t");
-                for (int j = 0; j < size; j++)
-                {
-                    if (field[i, j].Status == eFieldStatus.Empty) System.Console.Write("[ ]" + "\t");
-                    if (field[i, j].Status == eFieldStatus.Empty_Missed) System.Console.Write("[*]" + "\t");
-                    if (field[i, j].Status == eFieldStatus.Ship_Destoyed) System.Console.Write("[X]" + "\t");
-                    if (field[i, j].Status == eFieldStatus.Ship) System.Console.Write("[ ]" + "\t");
-                }
-                System.Console.WriteLine();
-            }
-        }
-
+        
         public bool CanPutShip(int x, int y, int len, eDirection dir)
         {
             if (dir == eDirection.Horizontal)
@@ -138,16 +92,16 @@ namespace Statki_WPF
             }
             if (field[x, y].Status == eFieldStatus.Ship)
             {
-                for (int i = 0; i < Game.SHIP_NUMBER; i++)
+                for (int i = 0; i < Game.ALL_SHIP_NUMBER; i++)
                 {
                     bool flag = false;
-                    if (this.player.ship[i].IsOnField(x, y) == true)
+                    if (this.owner.ship[i].IsOnField(x, y) == true)
                     {
-                        this.player.ship[i].energy -= 1;
-                        if (this.player.ship[i].energy == 0)
+                        this.owner.ship[i].energy -= 1;
+                        if (this.owner.ship[i].energy == 0)
                         {
-                            this.player.ship[i].Sink();
-                            SurroundShip(this.player.ship[i].position_x, this.player.ship[i].position_y, this.player.ship[i].direction, this.player.ship[i].length);
+                            this.owner.ship[i].Sink();
+                            SurroundShip(this.owner.ship[i].position_x, this.owner.ship[i].position_y, this.owner.ship[i].direction, this.owner.ship[i].length);
                         }
                         flag = true;
                     }
@@ -197,14 +151,20 @@ namespace Statki_WPF
 
         public bool CheckIfAllSinked()
         {
-            for (int i = 0; i < this.size; i++)
-            {
-                for (int j = 0; j < this.size; j++)
-                {
-                    if (field[i, j].Status == eFieldStatus.Ship) return false;
-                }
-            }
-            return true;
+           if(this.owner.ShipNumber[0] + this.owner.ShipNumber[1] + this.owner.ShipNumber[2] + this.owner.ShipNumber[3] == 0)
+                return true;
+            return false;
+        }
+
+        public bool CanAttackNear(int x, int y)
+        {
+            int fields = 4;
+            if (x + 1 >= Game.BOARD_SIZE || field[x + 1, y].Status == eFieldStatus.Empty_Missed || field[x + 1, y].Status == eFieldStatus.Ship_Destoyed) fields--;
+            if (y + 1 >= Game.BOARD_SIZE || field[x, y + 1].Status == eFieldStatus.Empty_Missed || field[x, y + 1].Status == eFieldStatus.Ship_Destoyed) fields--;
+            if (x - 1 < 0 || field[x - 1, y].Status == eFieldStatus.Empty_Missed || field[x - 1, y].Status == eFieldStatus.Ship_Destoyed) fields--;
+            if (y - 1 < 0 || field[x, y - 1].Status == eFieldStatus.Empty_Missed || field[x, y - 1].Status == eFieldStatus.Ship_Destoyed) fields--;
+            if (fields > 0) return true;
+            else return false;
         }
     }
 }
