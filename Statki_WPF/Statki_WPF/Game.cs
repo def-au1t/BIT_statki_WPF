@@ -21,7 +21,7 @@ namespace Statki_WPF
         public static bool DEBUG = false;                       //pokazywanie planszy komputera
         public static int BOARD_SIZE = 10;                      //rozmiar planszy
         public static int[] SHIP_NUMBER = new int[4] {4,3,2,1}; //liczba statków
-        public static int COMPUTER_DELAY = 600;                 //opóźnienie ruchu komputera
+        public static int COMPUTER_DELAY = 400;                 //opóźnienie ruchu komputera
         //-------------------------------------------------
 
 
@@ -77,7 +77,7 @@ namespace Statki_WPF
             window.ChangeStartButtonBackgroundToGreen();
             window.Start_button.Content = "Gra skończona.\n Wygrał ";
             window.Start_button.Content += winner.name;
-
+            window.DrawBoard(player2.board, 2);
             return;
         }
 
