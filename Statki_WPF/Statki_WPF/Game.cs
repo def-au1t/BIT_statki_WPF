@@ -16,6 +16,8 @@ namespace Statki_WPF
         public Player winner;
         public static int ALL_SHIP_NUMBER = -1;
         public eState GameStatus;
+        public int holdShipLength = 0;
+        public eDirection holdShipDir = eDirection.Horizontal;
 
         //----------- KONFIGURACJA ------------------------
         public static bool DEBUG = false;                       //pokazywanie planszy komputera
@@ -54,13 +56,34 @@ namespace Statki_WPF
             window.CreateBoards(window.Player1_board);
             window.CreateBoards(window.Player2_board);
 
+            window.Ship_setup.Visibility = System.Windows.Visibility.Visible;
+            window.ChangeAutoButtonBackgroundToGreen();
             window.ChangeStartButtonBackgroundToGrey();
-            window.Start_button.Content = "Ustaw statki";
+            window.Start_button.Content = "Oczekiwanie na \n   rozstawienie";
             window.DrawBoard(player1.board, 1);
             window.DrawHiddenBoard(player2.board, 2);
             window.UpdateShipNumber();
+            this.GameStatus = eState.ShipSetup;
         }
 
+        public void ShipSetupCompleted()
+        {
+            window.ChangeStartButtonBackgroundToGreen();
+            window.Start_button.Content = "Rozpocznij";
+        }
+
+        public void beginPlay()
+        {
+            player2.SetShips();
+            window.DrawBoard(player1.board, 1);
+            if (Game.DEBUG == true) window.DrawBoard(player2.board, 2);
+            else window.DrawHiddenBoard(player2.board, 2);
+            window.UpdateShipNumber();
+            GameStatus = eState.PlayerMove;
+            window.ChangeStartButtonBackgroundToGrey();
+            window.Start_button.Content = player1.name + " na ruchu";
+            window.Ship_setup.Visibility = System.Windows.Visibility.Hidden;
+        }
 
         public int MakeAttack(Player p, int x, int y)
         {

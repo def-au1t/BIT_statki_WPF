@@ -10,39 +10,12 @@ namespace Statki_WPF
     public class Human : Player
     {
         public Human(Game g, String n) : base(g, n) { }
-        /*     public override void SetShips()
-             {
-                 int k = 0;
 
-                 int position_x = -1;
-                 int position_y = -1;
-                 int dir = -1;
-                 for (int dl = 4; dl >= 1; dl--)
-                 {
-                     for (int i = 0; i < 5-dl; i++)
-                     {
-                         do
-                         {
-                             System.Console.WriteLine("Podaj parametry " + (5 - dl) + " " + dl + "-masztowca: ");
-                             position_x = ReadNumber();
-                             position_y = ReadNumber();
-                             dir = ReadNumber();
-
-                         } while (board.CanPutShip(position_x, position_y, dl, (eDirection)dir) != true);
-                         ship[k] = new Ship(dl, position_x, position_y, (eDirection)dir, this.board);
-                         board.PutShip(position_x, position_y, dl, (eDirection)dir);
-                         ship[k].isSet = true;
-                         k++;
-                         Console.Clear();
-                         this.board.DrawBoard();
-                     }
-                 }
-             } 
-             */
 
         public override void SetShips()
         {
             SetShipsRandom();
+            shipSetupCompleted = true;
         }
         public override void MakeMove(int x, int y)
         {
@@ -74,10 +47,8 @@ namespace Statki_WPF
 
         }
 
-        public void setShipsManually()
-        {
 
-        }
+
     /*    public int ReadNumber()
         {
           //  string l = Console.ReadLine();

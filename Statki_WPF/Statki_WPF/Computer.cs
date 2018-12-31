@@ -15,6 +15,7 @@ namespace Statki_WPF
         public override void SetShips()
         {
             SetShipsRandom();
+            shipSetupCompleted = true;
         }
 
         private void MakeMoveRandom()

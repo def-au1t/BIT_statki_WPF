@@ -11,12 +11,14 @@ namespace Statki_WPF
         public String name;
         public Game game;
         public Board board;
-        public Ship[] ship = new Ship[Game.ALL_SHIP_NUMBER];
-        public int[] ShipNumber = new int[4] { 0, 0, 0, 0 };
-
+        public Ship[] ship;
+        public int[] ShipNumber;
+        public bool shipSetupCompleted;
         public Player(Game g, String n)
         {
-
+            this.shipSetupCompleted = false;
+            this.ShipNumber = new int[4] { 0, 0, 0, 0 };
+            this.ship = new Ship[Game.ALL_SHIP_NUMBER];
             this.game = g;
             this.board = new Board(Game.BOARD_SIZE);
             this.name = n;
@@ -28,11 +30,8 @@ namespace Statki_WPF
 
         public void SetShipsRandom()
         {
-            for (int i = 0; i < 4; i++) {
-                this.ShipNumber[i] = Game.SHIP_NUMBER[i];
-            }
             int k = 0;
-
+            board.Init(this);
             int position_x = -1;
             int position_y = -1;
             int dir = -1;
@@ -54,7 +53,58 @@ namespace Statki_WPF
                     k++;
                 }
             }
+            for(int l=0; l<4; l++)
+            {
+                this.ShipNumber[l] = Game.SHIP_NUMBER[l];
+            }
+            shipSetupCompleted = true;
         }
 
+        public void SetShipManually(int length, int x, int y, eDirection d)
+        {
+            int nr_statku = 0;
+            int position_x = x;
+            int position_y = y;
+            eDirection dir = d;
+
+            if (this.ShipNumber[length - 1] >= Game.SHIP_NUMBER[length - 1]) return;
+            if (board.CanPutShip(position_x, position_y, length, (eDirection)dir) == false) return;
+
+            for (int i = 0; i < 4; i++)
+            {
+                nr_statku += this.ShipNumber[i];
+            }
+
+            ship[nr_statku] = new Ship(length, position_x, position_y, (eDirection)dir, this.board);
+            board.PutShip(position_x, position_y, length, (eDirection)dir);
+            this.ShipNumber[length - 1]++;
+
+            game.window.UpdateAllShipsButton();
+            game.window.DrawBoard(game.player1.board, 1);
+            game.window.UpdateShipNumber();
+
+            bool allSet = true;
+            for(int j=0; j<4; j++)
+            {
+                if (this.ShipNumber[j] != Game.SHIP_NUMBER[j]) allSet = false;
+            }
+            if (allSet == true)
+            {
+                shipSetupCompleted = true;
+                game.ShipSetupCompleted();
+            }
+            return;
+        }
+
+        public void resetShipSetup()
+        {
+            for (int i = 0; i < 4; i++) {
+                this.ShipNumber[i] = 0;
+            }
+            board.Init(this);
+            shipSetupCompleted = false;
+            game.window.ChangeStartButtonBackgroundToGreen();
+            game.window.Start_button.Content = "Oczekiwanie na \n   rozstawienie";
+        }
     }
 }

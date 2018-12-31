@@ -32,25 +32,88 @@ namespace Statki_WPF
         {
             Rectangle send = (Rectangle)sender;
             Grid parent = (Grid)send.Parent;
+            int x = Grid.GetRow(send);
+            int y = Grid.GetColumn(send);
             if (game.GameStatus == eState.PlayerMove)
             {
                 if (parent.Name == "Player1_board") return;
                 else
                 {
-                    game.player1.MakeMove(Grid.GetRow(send), Grid.GetColumn(send));
+                    game.player1.MakeMove(x, y);
                 }
-
             }
+            if (game.GameStatus == eState.HoldingShip)
+            {
+                if (parent.Name == "Player2_board") return;
+                else
+                {
+                    game.player1.SetShipManually(game.holdShipLength, x, y, game.holdShipDir);
+                }
+            }
+
+        }
+
+        public void rectangle_MouseEnter(object sender, RoutedEventArgs e) //TODO
+        {
+            Rectangle send = (Rectangle)sender;
+            Grid parent = (Grid)send.Parent;
+            int x = Grid.GetRow(send);
+            int y = Grid.GetColumn(send);
+            if (game.GameStatus == eState.PlayerMove)
+            {
+                if (parent.Name == "Player1_board") return;
+                else
+                {       //Zmiana koloru po najechaniu na planszę przeciwnika przed strzałem
+
+                    SolidColorBrush brush = new SolidColorBrush();
+                    brush.Color = Color.FromRgb(150, 200, 255);
+                    send.Fill = brush;
+                }
+            }
+            if (game.GameStatus == eState.HoldingShip)
+            {
+                if (parent.Name == "Player2_board") return;
+                else
+                {   //Zmiana koloru przed ustawieniem statku
+                }
+            }
+        }
+        public void rectangle_MouseLeave(object sender, RoutedEventArgs e)
+        {
+            Rectangle send = (Rectangle)sender;
+            Grid parent = (Grid)send.Parent;
+            int x = Grid.GetRow(send);
+            int y = Grid.GetColumn(send);
+            if (game.GameStatus == eState.PlayerMove)
+            {
+                if (parent.Name == "Player1_board") return;
+                else
+                {       //Zmiana koloru po najechaniu na planszę przeciwnika przed strzałem
+
+                    if (Game.DEBUG == true) setFieldColor(2, x, y, game.player2.board.field[x, y].Status, false);
+                    else setFieldColor(2, x, y, game.player2.board.field[x, y].Status, true);
+                }
+            }
+            if (game.GameStatus == eState.HoldingShip)
+            {
+                if (parent.Name == "Player2_board") return;
+                else
+                {   //Zmiana koloru przed ustawieniem statku
+                    if (Game.DEBUG == true) setFieldColor(1, x, y, game.player1.board.field[x, y].Status, false);
+                    else setFieldColor(1, x, y, game.player1.board.field[x, y].Status, true);
+                }
+            }
+
         }
         public void setFieldColor(int boardNumber, int w, int k, eFieldStatus status, bool hidden) //zmiana koloru pola
         {
             SolidColorBrush brush = new SolidColorBrush();
-            if (status == eFieldStatus.Empty) brush.Color = Color.FromRgb(12, 12, 12);
-            if (status == eFieldStatus.Empty_Missed) brush.Color = Color.FromRgb(122, 122, 122);
+            if (status == eFieldStatus.Empty) brush.Color = Color.FromRgb(100, 150, 255);
+            if (status == eFieldStatus.Empty_Missed) brush.Color = Color.FromRgb(180, 180, 180);
             if (status == eFieldStatus.Ship)
             {
-                if (hidden == true) { brush.Color = Color.FromRgb(12, 12, 12); }
-                else { brush.Color = Color.FromRgb(0, 255, 0); }
+                if (hidden == true) { brush.Color = Color.FromRgb(100, 150, 255); }
+                else { brush.Color = Color.FromRgb(0, 0, 0); }
             }
             if (status == eFieldStatus.Ship_Destoyed) brush.Color = Color.FromRgb(255, 0, 0);
             if (boardNumber == 1)
@@ -93,6 +156,8 @@ namespace Statki_WPF
                         Fill = brush,
                     };
                     field.MouseLeftButtonDown += rectangle_MouseLeftButtonDown;
+                    field.MouseEnter += rectangle_MouseEnter;
+                    field.MouseLeave += rectangle_MouseLeave;
                     field.SetValue(Grid.RowProperty, i);
                     field.SetValue(Grid.ColumnProperty, j);
                     board.Children.Add(field);
@@ -158,22 +223,22 @@ namespace Statki_WPF
             }
         }
 
+        public void SetupShipsAutomatically()
+        {
+            game.player1.SetShips();
+        }
+
         private void MainButtonCLick(object sender, RoutedEventArgs e)      //główny klawisz
         {
             if (game.GameStatus == eState.Init)
             {
                 game.GameStart();
             }
-            else if (game.GameStatus == eState.Started)
+            else if (game.GameStatus == eState.ShipSetup || game.GameStatus == eState.HoldingShip)
             {
-                game.player1.SetShips();
-                game.player2.SetShips();
-                DrawBoard(game.player1.board, 1);
-                if(Game.DEBUG==true)DrawBoard(game.player2.board, 2);
-                else DrawHiddenBoard(game.player2.board, 2);
-                UpdateShipNumber();
-                game.GameStatus = eState.PlayerMove;
-                this.Start_button.Content = game.player1.name + " na ruchu";
+                if (game.player1.shipSetupCompleted == true)
+                    game.beginPlay();
+
             }
         }
         public void ChangeStartButtonBackgroundToGrey() {
@@ -183,6 +248,98 @@ namespace Statki_WPF
         {
             this.Start_button.Background = new SolidColorBrush(Color.FromRgb(120, 255, 86));
         }
+        public void ChangeAutoButtonBackgroundToGreen()
+        {
+            this.Set_auto.Background = new SolidColorBrush(Color.FromRgb(120, 255, 86));
+        }
+        public void ChangeAutoButtonBackgroundToGrey()
+        {
+            this.Set_auto.Background = new SolidColorBrush(Color.FromRgb(220, 220, 220));
+        }
 
+        private void Set1Ship_Click(object sender, RoutedEventArgs e)
+        {
+            game.GameStatus = eState.HoldingShip;
+            game.holdShipLength = 1;
+        }
+
+        private void Set2Ship_Click(object sender, RoutedEventArgs e)
+        {
+
+            game.GameStatus = eState.HoldingShip;
+            game.holdShipLength = 2;
+        }
+
+        private void Set3Ship_Click(object sender, RoutedEventArgs e)
+        {
+
+            game.GameStatus = eState.HoldingShip;
+            game.holdShipLength = 3;
+        }
+
+        private void Set4Ship_Click(object sender, RoutedEventArgs e)
+        {
+
+            game.GameStatus = eState.HoldingShip;
+            game.holdShipLength = 4;
+        }
+
+        private void Turn_Click(object sender, RoutedEventArgs e)
+        {
+            if (game.holdShipDir == eDirection.Horizontal) game.holdShipDir = eDirection.Vertical;
+            else game.holdShipDir = eDirection.Horizontal;
+        }
+
+        private void Set_auto_Click(object sender, RoutedEventArgs e)
+        {
+            if (game.GameStatus == eState.ShipSetup || game.GameStatus == eState.HoldingShip)
+            {
+                SetupShipsAutomatically();
+                DrawBoard(game.player1.board, 1);
+                UpdateShipNumber();
+                game.ShipSetupCompleted();
+                UpdateAllShipsButton();
+            }
+        }
+
+        private void Reset_ships_Click(object sender, RoutedEventArgs e)
+        {
+            if (game.GameStatus == eState.ShipSetup || game.GameStatus == eState.HoldingShip)
+            {
+                ChangeAutoButtonBackgroundToGreen();
+                game.player1.resetShipSetup();
+                DrawBoard(game.player1.board, 1);
+                UpdateShipNumber();
+                ChangeStartButtonBackgroundToGrey();
+                UpdateAllShipsButton();
+            }
+        }
+
+        public void UpdateAllShipsButton()
+        {
+            bool isAllUnset = true;
+
+            for (int j = 0; j < 4; j++)
+            {
+                if (game.player1.ShipNumber[j] != 0) isAllUnset = false;
+                if (game.player1.ShipNumber[j] == Game.SHIP_NUMBER[j])
+                {
+                    Button button = this.Ship_setup.Children.Cast<Button>()
+                            .First(i => Grid.GetRow(i) == 3 - j && Grid.GetColumn(i) == 0);
+                    button.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    Button button = this.Ship_setup.Children.Cast<Button>()
+                            .First(i => Grid.GetRow(i) == 3 - j && Grid.GetColumn(i) == 0);
+                    button.Visibility = Visibility.Visible;
+                }
+            }
+            if (isAllUnset == true)
+            {
+                ChangeAutoButtonBackgroundToGreen();
+            }
+            else ChangeAutoButtonBackgroundToGrey();
+        }
     }
 }

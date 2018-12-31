@@ -35,7 +35,7 @@ namespace Statki_WPF
         {
             if (dir == eDirection.Horizontal)
             {
-                if (x < 0 || x >= this.size || y < 0 || y + len >= this.size) return false;
+                if (x < 0 || x >= this.size || y < 0 || y + len > this.size) return false;
                 for (int i = x - 1; i <= x + 1; i++)
                 {
                     for (int j = y - 1; j <= y + len; j++)
@@ -49,7 +49,7 @@ namespace Statki_WPF
             }
             else
             {
-                if (x < 0 || x + len >= this.size || y < 0 || y >= this.size) return false;
+                if (x < 0 || x + len > this.size || y < 0 || y >= this.size) return false;
                 for (int i = x - 1; i <= x + len; i++)
                 {
                     for (int j = y - 1; j <= y + 1; j++)
