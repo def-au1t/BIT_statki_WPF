@@ -32,7 +32,7 @@ namespace Statki_WPF
             this.GameStatus = eState.Init;
             this.window = window;
             CalculateAllShipNumber();
-            this.player1 = new Human(this, "Jacek");
+            this.player1 = new Human(this, "Gall Anonim");
             this.player2 = new Computer(this, "PC");
          //   player1.SetShips();
          //   System.Threading.Thread.Sleep(1000);
@@ -98,7 +98,7 @@ namespace Statki_WPF
 
             //Game.DrawTitle();
             window.ChangeStartButtonBackgroundToGreen();
-            window.Start_button.Content = "Gra skończona.\n Wygrał ";
+            window.Start_button.Content = "Gra skończona!\n Wygrał ";
             window.Start_button.Content += winner.name;
             window.DrawBoard(player2.board, 2);
             return;
