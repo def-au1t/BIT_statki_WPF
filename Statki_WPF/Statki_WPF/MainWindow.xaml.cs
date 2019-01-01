@@ -64,7 +64,6 @@ namespace Statki_WPF
                 if (parent.Name == "Player1_board") return;
                 else
                 {       //Zmiana koloru po najechaniu na planszę przeciwnika przed strzałem
-
                     SolidColorBrush brush = new SolidColorBrush();
                     brush.Color = Color.FromRgb(150, 200, 255);
                     send.Fill = brush;
@@ -75,6 +74,43 @@ namespace Statki_WPF
                 if (parent.Name == "Player2_board") return;
                 else
                 {   //Zmiana koloru przed ustawieniem statku
+                    int l = game.holdShipLength;
+                    eDirection dir = game.holdShipDir;
+                    if (dir == eDirection.Horizontal)
+                    {
+                        if (game.player1.board.CanPutShip(x, y, game.holdShipLength, game.holdShipDir) == true)
+                        {
+                            for (int i = 0; i < l; i++)
+                            {
+                                setFieldColorNoType(2, x, y + i, Brushes.Green);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < l; i++)
+                            {
+                                setFieldColorNoType(2, x, y + i, Brushes.Red);
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        if (game.player1.board.CanPutShip(x, y, game.holdShipLength, game.holdShipDir) == true)
+                        {
+                            for (int i = 0; i < l; i++)
+                            {
+                                setFieldColorNoType(2, x + i, y, Brushes.Green);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < l; i++)
+                            {
+                                setFieldColorNoType(2, x + i, y, Brushes.Red);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -99,11 +135,32 @@ namespace Statki_WPF
                 if (parent.Name == "Player2_board") return;
                 else
                 {   //Zmiana koloru przed ustawieniem statku
-                    if (Game.DEBUG == true) setFieldColor(1, x, y, game.player1.board.field[x, y].Status, false);
-                    else setFieldColor(1, x, y, game.player1.board.field[x, y].Status, true);
+                    DrawBoard(game.player1.board, 1);
+                      /*  if (dir == eDirection.Horizontal)
+                        {
+                            for (int i = 0; i < l; i++)
+                            {
+                                setFieldColor(1, x+i, y, game.player1.board.field[x+i, y].Status, false);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < l; i++)
+                            {
+                                setFieldColor(1, x, y+i, game.player1.board.field[x, y+i].Status, false);
+                            }
+                        }*/
                 }
             }
 
+        }
+        public void setFieldColorNoType(int boardNumber, int w, int k, Brush color) //zmiana koloru pola
+        {
+            if (w < Game.BOARD_SIZE && k < Game.BOARD_SIZE)
+            {
+                Rectangle field = (Rectangle)Player1_board.Children[w * Game.BOARD_SIZE + k];
+                field.Fill = color;
+            }
         }
         public void setFieldColor(int boardNumber, int w, int k, eFieldStatus status, bool hidden) //zmiana koloru pola
         {

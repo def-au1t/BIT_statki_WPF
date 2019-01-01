@@ -83,6 +83,11 @@ namespace Statki_WPF
             game.window.DrawBoard(game.player1.board, 1);
             game.window.UpdateShipNumber();
 
+            if(this.ShipNumber[length-1] == Game.SHIP_NUMBER[length - 1])
+            {
+                game.holdShipLength = 0;
+            }
+
             bool allSet = true;
             for(int j=0; j<4; j++)
             {

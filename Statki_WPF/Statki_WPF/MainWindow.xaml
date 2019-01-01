@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Statki_WPF"
         mc:Ignorable="d"
-        Title="Statki v0.3 - Autor: Jacek N." Height="550" Width="900" ResizeMode="CanMinimize">
+        Title="Statki v1.0 - Autor: Jacek N." Height="550" Width="900" ResizeMode="CanMinimize">
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
