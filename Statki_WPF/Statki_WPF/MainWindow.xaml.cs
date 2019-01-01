@@ -53,7 +53,7 @@ namespace Statki_WPF
 
         }
 
-        public void rectangle_MouseEnter(object sender, RoutedEventArgs e) //TODO
+        public void rectangle_MouseEnter(object sender, RoutedEventArgs e) 
         {
             Rectangle send = (Rectangle)sender;
             Grid parent = (Grid)send.Parent;
@@ -203,13 +203,16 @@ namespace Statki_WPF
             }
 
             SolidColorBrush brush = new SolidColorBrush(Color.FromRgb(200, 200, 200));
+            SolidColorBrush whiteBrush = new SolidColorBrush();
+            whiteBrush.Color = Colors.White;
             for (int i = 0; i < Game.BOARD_SIZE; i++)
             {
                 for (int j = 0; j < Game.BOARD_SIZE; j++)
                 {
                     var field = new Rectangle
                     {
-                        Margin = new Thickness(1.0),
+                        StrokeThickness = 1,
+                        Stroke = whiteBrush,
                         Fill = brush,
                     };
                     field.MouseLeftButtonDown += rectangle_MouseLeftButtonDown;
