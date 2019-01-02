@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 /*
     Przepraszam za straszny bałagan w kodzie, ale to mój pierwszy program w obiektowym języku programowania :)
     W planach jest przekształcenie kodu na bardziej czytelny i uporządkowany.
+    Początek projektu był inspirowany projektem sprzed kliku lat "MKlimowski---gra-w-statki-master"
     Pozdrawiam, 
     Jacek Nitychoruk
 */
