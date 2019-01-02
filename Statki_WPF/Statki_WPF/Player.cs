@@ -59,7 +59,7 @@ namespace Statki_WPF
             shipSetupCompleted = true;
         }
 
-        public void SetShipManually(int length, int x, int y, eDirection d)
+        public void SetShipManually(int length, int x, int y, eDirection d)     //ręczne dodanie statku
         {
             int nr_statku = 0;
             int position_x = x;
@@ -100,7 +100,7 @@ namespace Statki_WPF
             return;
         }
 
-        public void resetShipSetup()
+        public void resetShipSetup() //resetowanie ustawienia statków gracza
         {
             for (int i = 0; i < 4; i++) {
                 this.ShipNumber[i] = 0;

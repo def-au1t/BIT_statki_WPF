@@ -49,7 +49,7 @@ namespace Statki_WPF
             for (int i = 0; i< 4; i++) { suma_statkow += Game.SHIP_NUMBER[i]; }
             Game.ALL_SHIP_NUMBER = suma_statkow;
         }
-        public void GameStart()
+        public void GameStart()     //Początek gry
         {
             this.GameStatus = eState.Started;
 
@@ -68,13 +68,13 @@ namespace Statki_WPF
             this.GameStatus = eState.ShipSetup;
         }
 
-        public void ShipSetupCompleted()
+        public void ShipSetupCompleted()    //Gotowość do rozpoczęcia
         {
             window.ChangeStartButtonBackgroundToGreen();
             window.Start_button.Content = "Rozpocznij";
         }
 
-        public void beginPlay()
+        public void beginPlay()     //rozpoczęcie rozgrywki
         {
             player2.SetShips();
             window.DrawBoard(player1.board, 1);
@@ -87,14 +87,14 @@ namespace Statki_WPF
             window.Ship_setup.Visibility = System.Windows.Visibility.Hidden;
         }
 
-        public int MakeAttack(Player p, int x, int y)
+        public int MakeAttack(Player p, int x, int y) //wykonanie ataku
         {
             if (p == player1) return player2.board.Attack(x, y);
             if (p == player2) return player1.board.Attack(x, y);
             return -1;
         }
 
-        public void GameOver(Player win)
+        public void GameOver(Player win)    //koniec gry
         {
             this.winner = win;
 
@@ -106,7 +106,7 @@ namespace Statki_WPF
             return;
         }
 
-        public bool CheckIfFinished()
+        public bool CheckIfFinished()   //sprawdź, czy koniec gry
         {
             if (player1.board.CheckIfAllSinked()) return true;
             if (player2.board.CheckIfAllSinked()) return true;

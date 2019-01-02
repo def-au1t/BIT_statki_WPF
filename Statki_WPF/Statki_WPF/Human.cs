@@ -17,10 +17,10 @@ namespace Statki_WPF
             SetShipsRandom();
             shipSetupCompleted = true;
         }
-        public override void MakeMove(int x, int y)
+        public override void MakeMove(int x, int y) //Wykonanie ataku
         {
             int result = game.MakeAttack(this, x, y);
-            if (result == 0)
+            if (result == 0)    //trafiono w puste pole
             {
                 if (Game.DEBUG == true) game.window.DrawBoard(game.player2.board, 2);
                 else game.window.DrawHiddenBoard(game.player2.board, 2);
@@ -30,7 +30,7 @@ namespace Statki_WPF
                 game.player2.MakeMove(-1,-1);
             }
 
-            if (result == 1)
+            if (result == 1)    //trafiono w okręt
             {
                 if (Game.DEBUG == true) game.window.DrawBoard(game.player2.board, 2);
                 else game.window.DrawHiddenBoard(game.player2.board, 2);

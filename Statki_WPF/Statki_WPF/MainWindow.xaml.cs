@@ -13,6 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+/*
+    Przepraszam za straszny bałagan w kodzie, ale to mój pierwszy program w obiektowym języku programowania :)
+    W planach jest przekształcenie kodu na bardziej czytelny i uporządkowany.
+    Pozdrawiam, 
+    Jacek Nitychoruk
+*/
+
 namespace Statki_WPF
 {
     /// <summary>
@@ -20,7 +27,7 @@ namespace Statki_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Game game;
+        private Game game;
         public MainWindow()
         {
             InitializeComponent();
@@ -28,7 +35,7 @@ namespace Statki_WPF
             this.game = g;
         }
 
-        private void rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //naciśnięto przycisk
+        private void rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //naciśnięto przycisk myszy na planszy
         {
             Rectangle send = (Rectangle)sender;
             Grid parent = (Grid)send.Parent;
@@ -114,7 +121,7 @@ namespace Statki_WPF
                 }
             }
         }
-        private void rectangle_MouseLeave(object sender, RoutedEventArgs e)
+        private void rectangle_MouseLeave(object sender, RoutedEventArgs e) //wyjście myszy z planszy przeciwnika
         {
             Rectangle send = (Rectangle)sender;
             Grid parent = (Grid)send.Parent;
@@ -136,25 +143,11 @@ namespace Statki_WPF
                 else
                 {   //Zmiana koloru przed ustawieniem statku
                     DrawBoard(game.player1.board, 1);
-                      /*  if (dir == eDirection.Horizontal)
-                        {
-                            for (int i = 0; i < l; i++)
-                            {
-                                setFieldColor(1, x+i, y, game.player1.board.field[x+i, y].Status, false);
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < l; i++)
-                            {
-                                setFieldColor(1, x, y+i, game.player1.board.field[x, y+i].Status, false);
-                            }
-                        }*/
                 }
             }
 
         }
-        private void setFieldColorNoType(int boardNumber, int w, int k, Brush color) //zmiana koloru pola
+        private void setFieldColorNoType(int boardNumber, int w, int k, Brush color) //zmiana koloru pola na konkretną barwę
         {
             if (w < Game.BOARD_SIZE && k < Game.BOARD_SIZE)
             {
@@ -225,7 +218,7 @@ namespace Statki_WPF
             }
         }
 
-        public void UpdateShipNumber()
+        public void UpdateShipNumber()  //Wyświetlanie liczby obecnych na planszy statków
         {
             for (int j = 0; j < 4; j++)
             {
@@ -262,7 +255,7 @@ namespace Statki_WPF
             }
         }
 
-        public void DrawBoard(Board board, int boardNumber)
+        public void DrawBoard(Board board, int boardNumber) //aktualizacja planszy z pełnym widokiem statków
         {
             for (int i = 0; i < Game.BOARD_SIZE; i++)
             {
@@ -272,7 +265,7 @@ namespace Statki_WPF
                 }
             }
         }
-        public void DrawHiddenBoard(Board board, int boardNumber)
+        public void DrawHiddenBoard(Board board, int boardNumber) //aktualizacja planszy ukrytej
         {
             for (int i = 0; i < Game.BOARD_SIZE; i++)
             {
@@ -283,12 +276,12 @@ namespace Statki_WPF
             }
         }
 
-        private void SetupShipsAutomatically()
+        private void SetupShipsAutomatically() 
         {
             game.player1.SetShips();
         }
 
-        private void MainButtonCLick(object sender, RoutedEventArgs e)      //główny klawisz
+        private void MainButtonCLick(object sender, RoutedEventArgs e)      //główny klawisz na środku
         {
             if (game.GameStatus == eState.Init)
             {
@@ -375,7 +368,7 @@ namespace Statki_WPF
             }
         }
 
-        public void UpdateAllShipsButton()
+        public void UpdateAllShipsButton() //Aktualizacja wyglądu przycisków dodawania statków
         {
             bool isAllUnset = true;
 

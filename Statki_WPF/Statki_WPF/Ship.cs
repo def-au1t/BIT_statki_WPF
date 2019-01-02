@@ -24,7 +24,7 @@ namespace Statki_WPF
         public int position_y { get; set; }
         public eDirection direction { get; set; }
         private Board board { get; set; }
-        public bool IsOnField(int x, int y)
+        public bool IsOnField(int x, int y) //Sprawdzanie czy jest na danym polu
         {
             if (direction == eDirection.Horizontal && x == this.position_x)
             {

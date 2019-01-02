@@ -15,7 +15,7 @@ namespace Statki_WPF
         public int size { get; set; }
         public Field[,] field;
         public Player owner;
-        public void Init(Player p)
+        public void Init(Player p)  //Utworzenie planszy
         {
             this.owner = p;
             field = new Field[size, size];
@@ -31,7 +31,7 @@ namespace Statki_WPF
             }
         }
         
-        public bool CanPutShip(int x, int y, int len, eDirection dir)
+        public bool CanPutShip(int x, int y, int len, eDirection dir)   //sprawdzenie możliwości ustawienia statku
         {
             if (dir == eDirection.Horizontal)
             {
@@ -64,7 +64,7 @@ namespace Statki_WPF
             return true;
         }
 
-        public void PutShip(int x, int y, int length, eDirection dir)
+        public void PutShip(int x, int y, int length, eDirection dir)     //ustawienie statku na dane pole
         {
             if (dir == eDirection.Horizontal)
             {
@@ -82,7 +82,7 @@ namespace Statki_WPF
             }
         }
 
-        public int Attack(int x, int y)
+        public int Attack(int x, int y)     //wykonanie ataku na dane pole
         {
             if (x < 0 || x >= this.size || y < 0 || y >= this.size) return -1;
             if (field[x, y].Status == eFieldStatus.Empty)
@@ -119,7 +119,7 @@ namespace Statki_WPF
 
         }
 
-        private void SurroundShip(int x, int y, eDirection dir, int len)
+        private void SurroundShip(int x, int y, eDirection dir, int len)   //otoczenie statku nieaktywnymi polami po zatopieniu
         {
             if (dir == eDirection.Horizontal)
             {
@@ -149,14 +149,14 @@ namespace Statki_WPF
             }
         }
 
-        public bool CheckIfAllSinked()
+        public bool CheckIfAllSinked()  //sprawdzenie czy nie ma statków na planszy
         {
            if(this.owner.ShipNumber[0] + this.owner.ShipNumber[1] + this.owner.ShipNumber[2] + this.owner.ShipNumber[3] == 0)
                 return true;
             return false;
         }
 
-        public bool CanAttackNear(int x, int y)
+        public bool CanAttackNear(int x, int y) //czy można zaatakować "obok" danego pola
         {
             int fields = 4;
             if (x + 1 >= Game.BOARD_SIZE || field[x + 1, y].Status == eFieldStatus.Empty_Missed || field[x + 1, y].Status == eFieldStatus.Ship_Destoyed) fields--;

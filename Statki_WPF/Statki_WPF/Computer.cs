@@ -8,7 +8,7 @@ namespace Statki_WPF
 {
     public class Computer : Player
     {
-        public Stack<Field> ListOfAttackedAndEmptyNear;
+        private Stack<Field> ListOfAttackedAndEmptyNear;
         public Computer(Game g, String n) : base(g, n) {
             ListOfAttackedAndEmptyNear = new Stack<Field>();
         }
@@ -18,7 +18,7 @@ namespace Statki_WPF
             shipSetupCompleted = true;
         }
 
-        private void MakeMoveRandom()
+        private void MakeMoveRandom()       // losowy ruch
         {
             int x, y;
             do
@@ -31,7 +31,7 @@ namespace Statki_WPF
 
         }
 
-        private void MakeMoveBetter()
+        private void MakeMoveBetter() //Prosta logika wykonywania ruchów
         {
             Field f;
             if(ListOfAttackedAndEmptyNear.Count == 0)
@@ -84,7 +84,7 @@ namespace Statki_WPF
             return;
         }
 
-        private bool MakeMoveOnField(int x, int y)
+        private bool MakeMoveOnField(int x, int y)  //ruch na konkretne pole
         {
 
             int result = game.MakeAttack(this, x, y);
