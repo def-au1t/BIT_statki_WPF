@@ -17,17 +17,13 @@ namespace Statki_WPF
             this.position_y = position_y;
             this.direction = dir;
             this.board = b;
-            isSet = true;
-            isSinked = false;
         }
         public int length { get; set; }
         public int energy { get; set; }
         public int position_x { get; set; }
         public int position_y { get; set; }
-        public bool isSet { get; set; }
-        public bool isSinked { get; set; }
         public eDirection direction { get; set; }
-        public Board board { get; set; }
+        private Board board { get; set; }
         public bool IsOnField(int x, int y)
         {
             if (direction == eDirection.Horizontal && x == this.position_x)
@@ -49,7 +45,6 @@ namespace Statki_WPF
         public void Sink()
         {
             this.board.owner.ShipNumber[this.length - 1]--;
-            this.isSinked = true;
             return;
         }
     }

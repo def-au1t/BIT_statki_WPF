@@ -31,7 +31,7 @@ namespace Statki_WPF
 
         }
 
-        public void MakeMoveBetter()
+        private void MakeMoveBetter()
         {
             Field f;
             if(ListOfAttackedAndEmptyNear.Count == 0)
@@ -84,7 +84,7 @@ namespace Statki_WPF
             return;
         }
 
-        public bool MakeMoveOnField(int x, int y)
+        private bool MakeMoveOnField(int x, int y)
         {
 
             int result = game.MakeAttack(this, x, y);

@@ -28,7 +28,7 @@ namespace Statki_WPF
             this.game = g;
         }
 
-        public void rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //naciśnięto przycisk
+        private void rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //naciśnięto przycisk
         {
             Rectangle send = (Rectangle)sender;
             Grid parent = (Grid)send.Parent;
@@ -53,7 +53,7 @@ namespace Statki_WPF
 
         }
 
-        public void rectangle_MouseEnter(object sender, RoutedEventArgs e) 
+        private void rectangle_MouseEnter(object sender, RoutedEventArgs e) 
         {
             Rectangle send = (Rectangle)sender;
             Grid parent = (Grid)send.Parent;
@@ -114,7 +114,7 @@ namespace Statki_WPF
                 }
             }
         }
-        public void rectangle_MouseLeave(object sender, RoutedEventArgs e)
+        private void rectangle_MouseLeave(object sender, RoutedEventArgs e)
         {
             Rectangle send = (Rectangle)sender;
             Grid parent = (Grid)send.Parent;
@@ -154,7 +154,7 @@ namespace Statki_WPF
             }
 
         }
-        public void setFieldColorNoType(int boardNumber, int w, int k, Brush color) //zmiana koloru pola
+        private void setFieldColorNoType(int boardNumber, int w, int k, Brush color) //zmiana koloru pola
         {
             if (w < Game.BOARD_SIZE && k < Game.BOARD_SIZE)
             {
@@ -162,7 +162,7 @@ namespace Statki_WPF
                 field.Fill = color;
             }
         }
-        public void setFieldColor(int boardNumber, int w, int k, eFieldStatus status, bool hidden) //zmiana koloru pola
+        private void setFieldColor(int boardNumber, int w, int k, eFieldStatus status, bool hidden) //zmiana koloru pola
         {
             SolidColorBrush brush = new SolidColorBrush();
             if (status == eFieldStatus.Empty) brush.Color = Color.FromRgb(100, 150, 255);
@@ -283,7 +283,7 @@ namespace Statki_WPF
             }
         }
 
-        public void SetupShipsAutomatically()
+        private void SetupShipsAutomatically()
         {
             game.player1.SetShips();
         }
@@ -312,7 +312,7 @@ namespace Statki_WPF
         {
             this.Set_auto.Background = new SolidColorBrush(Color.FromRgb(120, 255, 86));
         }
-        public void ChangeAutoButtonBackgroundToGrey()
+        private void ChangeAutoButtonBackgroundToGrey()
         {
             this.Set_auto.Background = new SolidColorBrush(Color.FromRgb(220, 220, 220));
         }

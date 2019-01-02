@@ -16,8 +16,8 @@ namespace Statki_WPF
         public Player winner;
         public static int ALL_SHIP_NUMBER = -1;
         public eState GameStatus;
-        public int holdShipLength = 0;
-        public eDirection holdShipDir = eDirection.Horizontal;
+        public int holdShipLength;
+        public eDirection holdShipDir;
 
         //----------- KONFIGURACJA ------------------------
         public static bool DEBUG = false;                       //pokazywanie planszy komputera
@@ -29,6 +29,8 @@ namespace Statki_WPF
 
         public Game(MainWindow window)
         {
+            this.holdShipDir = eDirection.Horizontal;
+            this.holdShipLength = 0;
             this.GameStatus = eState.Init;
             this.window = window;
             CalculateAllShipNumber();

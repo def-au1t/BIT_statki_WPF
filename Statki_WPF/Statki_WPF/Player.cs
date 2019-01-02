@@ -27,8 +27,7 @@ namespace Statki_WPF
 
         public abstract void SetShips();
         public abstract void MakeMove(int x, int y);
-
-        public void SetShipsRandom()
+        protected void SetShipsRandom()
         {
             int k = 0;
             board.Init(this);

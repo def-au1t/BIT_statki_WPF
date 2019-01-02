@@ -44,23 +44,6 @@ namespace Statki_WPF
                 return;
             }
             return;
-
         }
-
-
-
-    /*    public int ReadNumber()
-        {
-          //  string l = Console.ReadLine();
-
-            int line = 0;
-
-            while (!int.TryParse(l, out line))
-            {
-                l = Console.ReadLine();
-            }
-            return line;
-            ;
-        } */
     }
 }

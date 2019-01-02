@@ -119,7 +119,7 @@ namespace Statki_WPF
 
         }
 
-        public void SurroundShip(int x, int y, eDirection dir, int len)
+        private void SurroundShip(int x, int y, eDirection dir, int len)
         {
             if (dir == eDirection.Horizontal)
             {
