@@ -66,6 +66,7 @@ namespace Statki_WPF
             int position_y = y;
             eDirection dir = d;
 
+            if (length == 0) return;
             if (this.ShipNumber[length - 1] >= Game.SHIP_NUMBER[length - 1]) return;
             if (board.CanPutShip(position_x, position_y, length, (eDirection)dir) == false) return;
 
